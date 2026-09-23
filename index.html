@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b0d12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Grok Build Mobile">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>Grok Build Mobile</title>
+<style>
+:root{color-scheme:dark;--bg:#080a0f;--panel:#11151d;--panel2:#171c26;--line:#293241;--text:#f5f7fb;--muted:#9aa5b5;--accent:#7c8cff;--ok:#35d07f;--danger:#ff647c}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",sans-serif;height:100%;overflow:hidden}
+button,input,textarea,select{font:inherit;color:inherit}button{border:0}.app{height:100dvh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+header{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--line);background:rgba(8,10,15,.94);backdrop-filter:blur(18px);z-index:2}
+.brand{display:flex;align-items:center;gap:10px;font-weight:750}.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#8a96ff,#4e59b9);display:grid;place-items:center;font-weight:900}
+.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}.dot{width:8px;height:8px;border-radius:50%;background:var(--danger)}.dot.ok{background:var(--ok)}
+main{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:16px 14px 110px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:14px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px;line-height:1.45}
+.row{display:flex;gap:9px}.row>*{flex:1}.stack{display:grid;gap:10px}
+input,textarea,select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;outline:none}input:focus,textarea:focus{border-color:var(--accent)}textarea{min-height:96px;resize:none}
+.btn{background:var(--accent);padding:11px 14px;border-radius:12px;font-weight:700;min-height:44px}.btn.secondary{background:var(--panel2);border:1px solid var(--line)}.btn.danger{background:#4b1822}.btn:disabled{opacity:.5}
+.messages{display:grid;gap:10px}.msg{max-width:94%;padding:12px 13px;border-radius:15px;white-space:pre-wrap;line-height:1.48;font-size:15px}.msg.user{justify-self:end;background:#2d377e}.msg.agent{justify-self:start;background:var(--panel2);border:1px solid var(--line)}.msg.system{justify-self:center;color:var(--muted);font-size:12px}
+.tool{font-size:12px;color:#c4ccda;border-left:3px solid var(--accent);padding:8px 10px;background:#0f131a;border-radius:8px;white-space:pre-wrap}
+.bottom{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(8,10,15,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+.composer{display:flex;gap:8px;align-items:flex-end}.composer textarea{min-height:46px;max-height:130px}.send{width:48px;min-width:48px;padding:0;display:grid;place-items:center}
+.hidden{display:none!important}.pill{display:inline-flex;padding:5px 8px;border-radius:99px;background:var(--panel2);font-size:11px;color:var(--muted)}
+details summary{cursor:pointer;font-weight:700;list-style:none}.dangerText{color:var(--danger)}
+#installHint{font-size:12px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><div class="logo">G</div><div>Grok Build <span class="pill">iPhone</span></div></div>
+  <div class="status"><span id="dot" class="dot"></span><span id="status">Offline</span></div>
+</header>
+
+<main id="main">
+  <section class="card" id="connectCard">
+    <h2>Connect to your Grok Build agent</h2>
+    <div class="muted" style="margin-bottom:12px">This iPhone app is a mobile client. Your Grok Build agent runs on a Mac, PC, Linux machine, or server and exposes its ACP WebSocket endpoint.</div>
+    <div class="stack">
+      <input id="wsUrl" placeholder="wss://your-server.example.com" autocomplete="off">
+      <input id="secret" placeholder="Agent secret" type="password" autocomplete="off">
+      <input id="cwd" placeholder="Working directory, e.g. /Users/me/project">
+      <select id="model"><option value="">Use server default model</option><option>grok-4.6</option><option>grok-4</option></select>
+      <div class="row">
+        <button class="btn" id="connect">Connect</button>
+        <button class="btn secondary" id="disconnect" disabled>Disconnect</button>
+      </div>
+    </div>
+    <div id="installHint">Tip: in Safari, use Share → Add to Home Screen after hosting this folder.</div>
+  </section>
+
+  <section class="card">
+    <details>
+      <summary>Mobile safety & connection</summary>
+      <div class="muted" style="margin-top:10px">
+        The mobile client does not store your agent secret on a server. It is kept in this browser session only.
+        For an internet-facing server, use <b>wss://</b>, a strong secret, authentication, and restrictive Grok permission rules.
+        Avoid exposing a raw agent endpoint to the public internet without an access-control layer.
+      </div>
+    </details>
+  </section>
+
+  <section class="messages" id="messages">
+    <div class="msg system">Ready. Connect to a Grok Build ACP server to start.</div>
+  </section>
+</main>
+
+<div class="bottom">
+  <div class="composer">
+    <textarea id="prompt" placeholder="Ask Grok to inspect, explain, edit, or work on your project…" disabled></textarea>
+    <button class="btn send" id="send" disabled>↑</button>
+  </div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let ws=null, rpc=1, sessionId=null, connected=false;
+
+function addMsg(text,type="agent"){
+  const el=document.createElement("div"); el.className="msg "+type; el.textContent=text;
+  $("messages").appendChild(el); $("main").scrollTop=$("main").scrollHeight; return el;
+}
+function setStatus(ok,text){connected=ok;$("dot").classList.toggle("ok",ok);$("status").textContent=text;$("connect").disabled=ok;$("disconnect").disabled=!ok;$("prompt").disabled=!ok;$("send").disabled=!ok;}
+function rpcSend(method,params={}){
+  return new Promise((resolve,reject)=>{
+    if(!ws||ws.readyState!==1) return reject(new Error("Not connected"));
+    const id=rpc++; ws.send(JSON.stringify({jsonrpc:"2.0",id,method,params}));
+    const timer=setTimeout(()=>reject(new Error("Request timed out")),30000);
+    window._rpc=window._rpc||{}; window._rpc[id]=(msg)=>{clearTimeout(timer);resolve(msg)};
+  });
+}
+function appendChunk(text){
+  let el=document.querySelector(".msg.agent.streaming");
+  if(!el){el=addMsg("","agent");el.classList.add("streaming")}
+  el.textContent += text; $("main").scrollTop=$("main").scrollHeight;
+}
+function finishStream(){document.querySelectorAll(".streaming").forEach(e=>e.classList.remove("streaming"))}
+
+async function connect(){
+  const url=$("wsUrl").value.trim(), secret=$("secret").value.trim(), cwd=$("cwd").value.trim()||"/";
+  if(!url) return addMsg("Enter the WebSocket URL first.","system");
+  try{
+    ws=new WebSocket(url);
+    ws.onopen=async()=>{
+      setStatus(true,"Connected"); addMsg("Connected to Grok Build.","system");
+      if(secret) ws.send(JSON.stringify({jsonrpc:"2.0",method:"authenticate",id:rpc++,params:{secret}}));
+      try{
+        await rpcSend("initialize",{protocolVersion:1,clientInfo:{name:"Grok Build Mobile",version:"1.0.0"},capabilities:{}}); 
+        const r=await rpcSend("session/new",{cwd,mcpServers:[],_meta:{yoloMode:false,...($("model").value?{modelId:$("model").value}:{})}});
+        sessionId=r.result?.sessionId||r.result?.session_id||null;
+        if(!sessionId){addMsg("Connected, but the server did not return a session ID. Check the agent/ACP server version.","system");}
+        else addMsg("Session ready.","system");
+      }catch(e){addMsg("ACP setup error: "+e.message,"system")}
+    };
+    ws.onmessage=(ev)=>{
+      let m; try{m=JSON.parse(ev.data)}catch{return}
+      if(m.id!=null && window._rpc?.[m.id]){window._rpc[m.id](m);delete window._rpc[m.id];return}
+      if(m.method==="session/update"){
+        const u=m.params?.update||m.params?.sessionUpdate||m.params;
+        const kind=u?.sessionUpdate||u?.type;
+        if(kind==="agent_message_chunk"){appendChunk(u?.content?.text??u?.text??"")}
+        else if(kind==="tool_call"||kind==="tool_call_update"){const t=u?.title||u?.toolCall?.title||JSON.stringify(u);addMsg("Tool: "+t,"system")}
+        else if(kind==="plan"){addMsg("Plan: "+JSON.stringify(u?.plan??u),"system")}
+        else if(u?.content?.text) appendChunk(u.content.text);
+      }
+      if(m.method==="x.ai/leader_reconnected") addMsg("Agent connection restored.","system");
+      if(m.error) addMsg("Agent error: "+(m.error.message||JSON.stringify(m.error)),"system");
+    };
+    ws.onerror=()=>{setStatus(false,"Connection error")};
+    ws.onclose=()=>{setStatus(false,"Offline");sessionId=null;addMsg("Disconnected.","system")};
+  }catch(e){addMsg("Connection failed: "+e.message,"system")}
+}
+function disconnect(){if(ws) ws.close();setStatus(false,"Offline");sessionId=null}
+async function sendPrompt(){
+  const box=$("prompt"), text=box.value.trim(); if(!text||!sessionId)return;
+  addMsg(text,"user");box.value="";
+  finishStream();
+  try{
+    await rpcSend("session/prompt",{sessionId,prompt:{content:text}});
+  }catch(e){addMsg("Send failed: "+e.message,"system")}
+}
+$("connect").onclick=connect;$("disconnect").onclick=disconnect;$("send").onclick=sendPrompt;
+$("prompt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendPrompt()}});
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
