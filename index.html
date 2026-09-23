@@ -1,155 +1,55 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#0b0d12">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Grok Build Mobile">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-180.png">
-<title>Grok Build Mobile</title>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07090d"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Grok AI">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon.svg"><title>Grok AI</title>
 <style>
-:root{color-scheme:dark;--bg:#080a0f;--panel:#11151d;--panel2:#171c26;--line:#293241;--text:#f5f7fb;--muted:#9aa5b5;--accent:#7c8cff;--ok:#35d07f;--danger:#ff647c}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",sans-serif;height:100%;overflow:hidden}
-button,input,textarea,select{font:inherit;color:inherit}button{border:0}.app{height:100dvh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
-header{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--line);background:rgba(8,10,15,.94);backdrop-filter:blur(18px);z-index:2}
-.brand{display:flex;align-items:center;gap:10px;font-weight:750}.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#8a96ff,#4e59b9);display:grid;place-items:center;font-weight:900}
-.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}.dot{width:8px;height:8px;border-radius:50%;background:var(--danger)}.dot.ok{background:var(--ok)}
-main{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:16px 14px 110px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px;box-shadow:0 8px 28px rgba(0,0,0,.18)}
-h2{font-size:18px;margin:0 0 12px}h3{font-size:14px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px;line-height:1.45}
-.row{display:flex;gap:9px}.row>*{flex:1}.stack{display:grid;gap:10px}
-input,textarea,select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;outline:none}input:focus,textarea:focus{border-color:var(--accent)}textarea{min-height:96px;resize:none}
-.btn{background:var(--accent);padding:11px 14px;border-radius:12px;font-weight:700;min-height:44px}.btn.secondary{background:var(--panel2);border:1px solid var(--line)}.btn.danger{background:#4b1822}.btn:disabled{opacity:.5}
-.messages{display:grid;gap:10px}.msg{max-width:94%;padding:12px 13px;border-radius:15px;white-space:pre-wrap;line-height:1.48;font-size:15px}.msg.user{justify-self:end;background:#2d377e}.msg.agent{justify-self:start;background:var(--panel2);border:1px solid var(--line)}.msg.system{justify-self:center;color:var(--muted);font-size:12px}
-.tool{font-size:12px;color:#c4ccda;border-left:3px solid var(--accent);padding:8px 10px;background:#0f131a;border-radius:8px;white-space:pre-wrap}
-.bottom{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(8,10,15,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line)}
-.composer{display:flex;gap:8px;align-items:flex-end}.composer textarea{min-height:46px;max-height:130px}.send{width:48px;min-width:48px;padding:0;display:grid;place-items:center}
-.hidden{display:none!important}.pill{display:inline-flex;padding:5px 8px;border-radius:99px;background:var(--panel2);font-size:11px;color:var(--muted)}
-details summary{cursor:pointer;font-weight:700;list-style:none}.dangerText{color:var(--danger)}
-#installHint{font-size:12px;color:var(--muted);margin-top:8px}
-</style>
-</head>
-<body>
-<div class="app">
-<header>
-  <div class="brand"><div class="logo">G</div><div>Grok Build <span class="pill">iPhone</span></div></div>
-  <div class="status"><span id="dot" class="dot"></span><span id="status">Offline</span></div>
-</header>
+:root{--bg:#07090d;--card:#11161f;--card2:#181f2a;--line:#2b3543;--text:#f5f7fb;--muted:#99a5b6;--a:#7785ff;--good:#35d48a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif}#app{height:100dvh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+header{height:62px;padding:0 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#080a0eee;backdrop-filter:blur(18px);position:relative;z-index:3}.brand{display:flex;gap:9px;align-items:center;font-weight:800}.logo{width:35px;height:35px;border-radius:11px;background:linear-gradient(135deg,#9aa5ff,#515dc4);display:grid;place-items:center;font-size:20px}.status{font-size:11px;color:var(--muted)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef6074;margin-right:5px}.dot.ok{background:var(--good)}
+main{flex:1;overflow:auto;padding:14px 13px 155px}.view{display:none}.view.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:14px;margin-bottom:11px}.title{font-size:19px;font-weight:800}.muted{color:var(--muted);font-size:13px;line-height:1.45}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{padding:14px;background:var(--card2);border:1px solid var(--line);border-radius:15px;min-height:105px;color:var(--text)}.tile .ico{font-size:22px;margin-bottom:8px}.tile b{display:block;margin-bottom:4px}
+input,textarea,select{width:100%;background:var(--card2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:11px;outline:none;font:inherit}textarea{min-height:88px;resize:none}.row{display:flex;gap:8px}.row>*{flex:1}.btn{border:0;border-radius:12px;padding:11px 13px;background:var(--a);color:#fff;font-weight:750;min-height:44px}.btn.secondary{background:var(--card2);border:1px solid var(--line)}.btn.good{background:#155f42}
+.msgs{display:grid;gap:8px}.msg{padding:11px 13px;border-radius:16px;line-height:1.48;white-space:pre-wrap;max-width:94%}.user{justify-self:end;background:#313c8e}.bot{justify-self:start;background:var(--card2);border:1px solid var(--line)}.sys{justify-self:center;color:var(--muted);font-size:11px}.list{display:grid;gap:7px}.item{padding:11px;background:var(--card2);border:1px solid var(--line);border-radius:11px;font-size:13px}
+nav{position:fixed;bottom:0;left:0;right:0;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:#07090df5;backdrop-filter:blur(18px);border-top:1px solid var(--line);z-index:4}.tabs{display:flex;justify-content:space-around;margin-bottom:7px}.tab{border:0;background:none;color:var(--muted);font-size:11px;padding:5px}.tab.active{color:#fff}.composer{display:flex;gap:7px;align-items:flex-end}.composer textarea{min-height:45px;max-height:120px}.send{width:48px;min-width:48px;padding:0}.hidden{display:none!important}.badge{font-size:10px;color:var(--muted);background:var(--card2);padding:4px 7px;border-radius:99px}
+</style></head>
+<body><div id="app">
+<header><div class="brand"><div class="logo">G</div><span>Grok AI <span class="badge">iPhone</span></span></div><div class="status"><span id="dot" class="dot"></span><span id="status">Offline</span></div></header>
+<main>
+<section id="home" class="view active"><div class="card"><div class="title">Grok AI coding assistant</div><p class="muted">Safari version of the iPhone interface. Connect it to your Grok Build/ACP relay to use the agent.</p></div>
+<div class="grid"><button class="tile" data-p="Review my project and tell me what should be improved next."><div class="ico">🔎</div><b>Review project</b><span class="muted">Analyze the workspace.</span></button>
+<button class="tile" data-p="Check the current project for obvious bugs and explain them."><div class="ico">🐞</div><b>Find bugs</b><span class="muted">Diagnose problems.</span></button>
+<button class="tile" data-p="Plan the next update for my project."><div class="ico">🧠</div><b>Plan update</b><span class="muted">Build a development plan.</span></button>
+<button class="tile" data-p="Explain the architecture of my current project."><div class="ico">📐</div><b>Explain project</b><span class="muted">Understand the codebase.</span></button></div>
+<div class="card"><b>Project</b><p class="muted" id="projectName">No browser project selected.</p><button class="btn secondary" id="pick">Choose files</button></div></section>
 
-<main id="main">
-  <section class="card" id="connectCard">
-    <h2>Connect to your Grok Build agent</h2>
-    <div class="muted" style="margin-bottom:12px">This iPhone app is a mobile client. Your Grok Build agent runs on a Mac, PC, Linux machine, or server and exposes its ACP WebSocket endpoint.</div>
-    <div class="stack">
-      <input id="wsUrl" placeholder="wss://your-server.example.com" autocomplete="off">
-      <input id="secret" placeholder="Agent secret" type="password" autocomplete="off">
-      <input id="cwd" placeholder="Working directory, e.g. /Users/me/project">
-      <select id="model"><option value="">Use server default model</option><option>grok-4.6</option><option>grok-4</option></select>
-      <div class="row">
-        <button class="btn" id="connect">Connect</button>
-        <button class="btn secondary" id="disconnect" disabled>Disconnect</button>
-      </div>
-    </div>
-    <div id="installHint">Tip: in Safari, use Share → Add to Home Screen after hosting this folder.</div>
-  </section>
+<section id="chat" class="view"><div id="msgs" class="msgs"><div class="msg sys">Connect in Settings to start an AI session.</div></div></section>
 
-  <section class="card">
-    <details>
-      <summary>Mobile safety & connection</summary>
-      <div class="muted" style="margin-top:10px">
-        The mobile client does not store your agent secret on a server. It is kept in this browser session only.
-        For an internet-facing server, use <b>wss://</b>, a strong secret, authentication, and restrictive Grok permission rules.
-        Avoid exposing a raw agent endpoint to the public internet without an access-control layer.
-      </div>
-    </details>
-  </section>
+<section id="project" class="view"><div class="card"><div class="title">Browser workspace</div><p class="muted">Safari can access files you explicitly choose through the Files picker. The selected files are available to the browser app; unrestricted iOS filesystem access is not available.</p><input id="files" type="file" multiple webkitdirectory class="hidden"><button class="btn" id="choose">Choose project folder</button></div><div id="fileList" class="list"></div></section>
 
-  <section class="messages" id="messages">
-    <div class="msg system">Ready. Connect to a Grok Build ACP server to start.</div>
-  </section>
+<section id="tools" class="view"><div class="card"><div class="title">Agent tools</div><p class="muted">Autopilot changes the request metadata sent to the trusted agent. It does not bypass iOS security.</p><button class="btn secondary" id="auto">Autopilot: OFF</button></div><div class="card"><b>Device memory</b><textarea id="memory" placeholder="Notes saved on this iPhone"></textarea><button class="btn" id="saveMemory" style="margin-top:8px">Save memory</button></div><div class="card"><button class="btn secondary" id="clear">Clear chat</button></div></section>
+
+<section id="settings" class="view"><div class="card"><div class="title">Agent connection</div><p class="muted">Use an authenticated WebSocket relay for the Grok Build agent.</p><input id="url" placeholder="wss://your-agent.example/ws"><input id="secret" type="password" placeholder="Agent secret" style="margin-top:8px"><input id="cwd" placeholder="Agent workspace path" style="margin-top:8px"><input id="model" placeholder="Model (optional)" style="margin-top:8px"><div class="row" style="margin-top:9px"><button class="btn" id="connect">Connect</button><button class="btn secondary" id="disconnect">Disconnect</button></div></div>
+<div class="card"><b>Install</b><p class="muted">Once this app is hosted over HTTPS, open it in Safari, Share → Add to Home Screen → turn on Open as Web App → Add.</p></div></section>
 </main>
-
-<div class="bottom">
-  <div class="composer">
-    <textarea id="prompt" placeholder="Ask Grok to inspect, explain, edit, or work on your project…" disabled></textarea>
-    <button class="btn send" id="send" disabled>↑</button>
-  </div>
+<nav><div class="tabs"><button class="tab active" data-v="home">Home</button><button class="tab" data-v="chat">Chat</button><button class="tab" data-v="project">Projects</button><button class="tab" data-v="tools">Tools</button><button class="tab" data-v="settings">Settings</button></div><div class="composer"><textarea id="prompt" placeholder="Ask Grok…" disabled></textarea><button id="send" class="btn send" disabled>↑</button></div></nav>
 </div>
-</div>
-
 <script>
-const $=id=>document.getElementById(id);
-let ws=null, rpc=1, sessionId=null, connected=false;
-
-function addMsg(text,type="agent"){
-  const el=document.createElement("div"); el.className="msg "+type; el.textContent=text;
-  $("messages").appendChild(el); $("main").scrollTop=$("main").scrollHeight; return el;
-}
-function setStatus(ok,text){connected=ok;$("dot").classList.toggle("ok",ok);$("status").textContent=text;$("connect").disabled=ok;$("disconnect").disabled=!ok;$("prompt").disabled=!ok;$("send").disabled=!ok;}
-function rpcSend(method,params={}){
-  return new Promise((resolve,reject)=>{
-    if(!ws||ws.readyState!==1) return reject(new Error("Not connected"));
-    const id=rpc++; ws.send(JSON.stringify({jsonrpc:"2.0",id,method,params}));
-    const timer=setTimeout(()=>reject(new Error("Request timed out")),30000);
-    window._rpc=window._rpc||{}; window._rpc[id]=(msg)=>{clearTimeout(timer);resolve(msg)};
-  });
-}
-function appendChunk(text){
-  let el=document.querySelector(".msg.agent.streaming");
-  if(!el){el=addMsg("","agent");el.classList.add("streaming")}
-  el.textContent += text; $("main").scrollTop=$("main").scrollHeight;
-}
-function finishStream(){document.querySelectorAll(".streaming").forEach(e=>e.classList.remove("streaming"))}
-
-async function connect(){
-  const url=$("wsUrl").value.trim(), secret=$("secret").value.trim(), cwd=$("cwd").value.trim()||"/";
-  if(!url) return addMsg("Enter the WebSocket URL first.","system");
-  try{
-    ws=new WebSocket(url);
-    ws.onopen=async()=>{
-      setStatus(true,"Connected"); addMsg("Connected to Grok Build.","system");
-      if(secret) ws.send(JSON.stringify({jsonrpc:"2.0",method:"authenticate",id:rpc++,params:{secret}}));
-      try{
-        await rpcSend("initialize",{protocolVersion:1,clientInfo:{name:"Grok Build Mobile",version:"1.0.0"},capabilities:{}}); 
-        const r=await rpcSend("session/new",{cwd,mcpServers:[],_meta:{yoloMode:false,...($("model").value?{modelId:$("model").value}:{})}});
-        sessionId=r.result?.sessionId||r.result?.session_id||null;
-        if(!sessionId){addMsg("Connected, but the server did not return a session ID. Check the agent/ACP server version.","system");}
-        else addMsg("Session ready.","system");
-      }catch(e){addMsg("ACP setup error: "+e.message,"system")}
-    };
-    ws.onmessage=(ev)=>{
-      let m; try{m=JSON.parse(ev.data)}catch{return}
-      if(m.id!=null && window._rpc?.[m.id]){window._rpc[m.id](m);delete window._rpc[m.id];return}
-      if(m.method==="session/update"){
-        const u=m.params?.update||m.params?.sessionUpdate||m.params;
-        const kind=u?.sessionUpdate||u?.type;
-        if(kind==="agent_message_chunk"){appendChunk(u?.content?.text??u?.text??"")}
-        else if(kind==="tool_call"||kind==="tool_call_update"){const t=u?.title||u?.toolCall?.title||JSON.stringify(u);addMsg("Tool: "+t,"system")}
-        else if(kind==="plan"){addMsg("Plan: "+JSON.stringify(u?.plan??u),"system")}
-        else if(u?.content?.text) appendChunk(u.content.text);
-      }
-      if(m.method==="x.ai/leader_reconnected") addMsg("Agent connection restored.","system");
-      if(m.error) addMsg("Agent error: "+(m.error.message||JSON.stringify(m.error)),"system");
-    };
-    ws.onerror=()=>{setStatus(false,"Connection error")};
-    ws.onclose=()=>{setStatus(false,"Offline");sessionId=null;addMsg("Disconnected.","system")};
-  }catch(e){addMsg("Connection failed: "+e.message,"system")}
-}
-function disconnect(){if(ws) ws.close();setStatus(false,"Offline");sessionId=null}
-async function sendPrompt(){
-  const box=$("prompt"), text=box.value.trim(); if(!text||!sessionId)return;
-  addMsg(text,"user");box.value="";
-  finishStream();
-  try{
-    await rpcSend("session/prompt",{sessionId,prompt:{content:text}});
-  }catch(e){addMsg("Send failed: "+e.message,"system")}
-}
-$("connect").onclick=connect;$("disconnect").onclick=disconnect;$("send").onclick=sendPrompt;
-$("prompt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendPrompt()}});
-if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
-</script>
-</body>
-</html>
+const $=x=>document.getElementById(x);let ws=null,sid=null,rid=1,auto=false,pending={};
+const saved=(k,d="")=>localStorage.getItem(k)??d;
+$("url").value=saved("g.url");$("cwd").value=saved("g.cwd");$("model").value=saved("g.model");$("memory").value=saved("g.memory");
+function view(v){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===v));document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.v===v))}
+function add(t,c="bot"){let e=document.createElement("div");e.className="msg "+c;e.textContent=t;$("msgs").append(e);$("chat").scrollTop=999999;return e}
+function state(ok,t){$("dot").classList.toggle("ok",ok);$("status").textContent=t;$("prompt").disabled=!ok;$("send").disabled=!ok}
+function rpc(method,params){return new Promise((res,rej)=>{if(!ws||ws.readyState!==1)return rej(Error("Not connected"));let id=rid++;pending[id]={res,rej};ws.send(JSON.stringify({jsonrpc:"2.0",id,method,params}));setTimeout(()=>{if(pending[id]){delete pending[id];rej(Error("Timed out"))}},45000)})}
+$("connect").onclick=async()=>{let u=$("url").value.trim();localStorage.setItem("g.url",u);localStorage.setItem("g.cwd",$("cwd").value);localStorage.setItem("g.model",$("model").value);try{ws=new WebSocket(u);ws.onopen=async()=>{state(true,"Connected");try{if($("secret").value)ws.send(JSON.stringify({jsonrpc:"2.0",id:rid++,method:"authenticate",params:{secret:$("secret").value}}));await rpc("initialize",{protocolVersion:1,clientInfo:{name:"Grok AI Safari",version:"1.0"}});let r=await rpc("session/new",{cwd:$("cwd").value||"/",mcpServers:[],_meta:{yoloMode:auto,...($("model").value?{modelId:$("model").value}:{})}});sid=r.sessionId||r.session_id;add("AI session ready.","sys");view("chat")}catch(e){add("Agent setup error: "+e.message,"sys")}};ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch{return}if(m.id&&pending[m.id]){let p=pending[m.id];delete pending[m.id];m.error?p.rej(Error(m.error.message||"Agent error")):p.res(m.result||{});return}if(m.method==="session/update"){let u=m.params?.update||m.params||{};let c=u.content?.text||u.text||"";if(c){let last=document.querySelector("#msgs .bot:last-child");if(last&&last.dataset.stream)last.textContent+=c;else{let e=add(c,"bot");e.dataset.stream="1"}}if(u.sessionUpdate==="tool_call"||u.type==="tool_call")add("Tool: "+(u.title||"working…"),"sys")}};ws.onclose=()=>state(false,"Offline");ws.onerror=()=>state(false,"Error")}catch(e){add("Connection failed: "+e.message,"sys")}};
+$("disconnect").onclick=()=>{ws?.close();sid=null;state(false,"Offline")};
+async function send(t){t=(t||$("prompt").value).trim();if(!t||!sid)return;add(t,"user");$("prompt").value="";view("chat");try{await rpc("session/prompt",{sessionId:sid,prompt:{content:t}})}catch(e){add("Send failed: "+e.message,"sys")}}
+$("send").onclick=()=>send();$("prompt").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}};
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>view(b.dataset.v));document.querySelectorAll(".tile").forEach(b=>b.onclick=()=>{view("chat");send(b.dataset.p)});
+$("auto").onclick=()=>{auto=!auto;$("auto").textContent="Autopilot: "+(auto?"ON":"OFF");$("auto").className="btn "+(auto?"good":"secondary")};
+$("saveMemory").onclick=()=>{localStorage.setItem("g.memory",$("memory").value);add("Memory saved.","sys")};$("clear").onclick=()=>{$("msgs").innerHTML="";add("Chat cleared.","sys")};
+$("pick").onclick=()=>{view("project");$("files").click()};$("choose").onclick=()=>$("files").click();
+$("files").onchange=()=>{let fs=[...$("files").files];$("projectName").textContent=fs.length+" files selected";$("fileList").innerHTML="";fs.slice(0,100).forEach(f=>{let e=document.createElement("div");e.className="item";e.textContent=f.webkitRelativePath||f.name;$("fileList").append(e)});localStorage.setItem("g.projectCount",fs.length);view("project")};
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+</script></body></html>
